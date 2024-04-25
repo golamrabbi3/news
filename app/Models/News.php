@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class News extends Model
 {
@@ -15,23 +20,39 @@ class News extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'title',
         'user_id',
+        'title',
         'description',
+        'status',
     ];
 
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function tags(): HasMany
+    public function categories(): BelongsToMany
     {
-        return $this->hasMany(Tag::class);
+        return $this->belongsToMany(Category::class)->withTimestamps();
     }
 
-    public function categories(): HasMany
+    public function tags(): BelongsToMany
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsToMany(Tag::class)->withTimestamps();
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function featuredImage(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'mediable');
+    }
+
+    public function media(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'mediable');
     }
 }

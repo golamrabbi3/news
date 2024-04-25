@@ -4,29 +4,35 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-
-        User::factory()->create([
-            'first_name' => "Super",
-            'last_name' => "Admin",
-            'email' => "superadmin@gmail.com",
-            'phone' => "001112223333",
-            'country_id' => 1,
-            'password' => Hash::make('superadmin'),
-            'remember_token' => Str::random(10),
+        $user = User::create([
+            'name' => "Super Admin",
+            'email' => "superadmin@example.com",
+            'password' => 'P@ssw0rd',
+            'email_verified_at' => now(),
         ]);
 
-        User::factory()->count(10)->create();
+        $user->assignRole([1]);
+
+        $user->avatar()->create([
+            'path' => 'https://i.pravatar.cc/150?img=1',
+        ]);
+
+        User::factory()
+            ->count(4)
+            ->create()->each(function ($user) {
+                $user->avatar()->create([
+                    'path' => "https://i.pravatar.cc/150?img={$user->id}",
+                ]);
+
+                $user->assignRole(random_int(2, 4));
+            });
     }
 }

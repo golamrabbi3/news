@@ -3,14 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tag>
  */
 class TagFactory extends Factory
 {
-
     /**
      * Define the model's default state.
      *
@@ -18,11 +16,11 @@ class TagFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->word;
-        $slug = Str::slug($name);
+        $name = fake()->unique()->word;
+
         return [
             'name' => $name,
-            'slug' => $slug,
+            'slug' => str($name)->slug(),
         ];
     }
 }
