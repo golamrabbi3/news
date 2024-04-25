@@ -9,7 +9,6 @@ use App\Http\Resources\News\NewsResource;
 use App\Models\News;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PaginatedNumber;
 use Throwable;
@@ -76,14 +75,33 @@ class NewsController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(News $news): JsonResponse
+    {
+        $news->load(
+            'user',
+            'categories',
+            'tags',
+            'featuredImage',
+            'comments',
+        );
+
+        return response()->json([
+            'message' => __('Fetched news successfully.'),
+            'data' => new NewsResource($news),
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(NewsRequest $request, News $news)
+    public function update(NewsRequest $request, News $news): JsonResponse
     {
         $message = __('Failed to update the news! Please try again.');
         DB::beginTransaction();
         try {
-            if ($news->update($request->only('title', 'description', 'status'))) {
+            if (!$news->update($request->only('title', 'description', 'status'))) {
                 throw new Exception($message);
             }
             $news->categories()->sync($request->input('categories', []));
@@ -114,7 +132,7 @@ class NewsController extends Controller
     public function destroy(News $news): JsonResponse
     {
         if ($news->delete()) {
-            return response()->json(['message' => __('The news has been deleted.')]);
+            return response()->json(['message' => __('The news has been deleted successfully.')]);
         }
 
         return response()->json([

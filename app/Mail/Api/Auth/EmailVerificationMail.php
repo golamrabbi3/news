@@ -40,7 +40,7 @@ class EmailVerificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.email_verification',
+            markdown: 'emails.auth.email_verification',
         );
     }
 

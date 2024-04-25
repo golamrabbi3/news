@@ -2,7 +2,7 @@
 # {{ __('Hello') }}, {{ $name }}
 
 {{ __(
-    "You've just recovered your account password on :appName platform. If it's not you please contact to our support center.",
+    "You've just changed your account password on :appName platform. If it's not you please contact to our support center.",
     [
         'appName' => config('app.name'),
     ],

@@ -25,7 +25,7 @@ class NewsResource extends JsonResource
             'author_name' => $this->user?->name,
             'author_email' => $this->user?->email,
             'author_image' => $this->user?->profileImage?->path,
-            'comments_count' => $this->comments_count,
+            'comments_count' => $this->comments_count ?? 0,
             'featured_image' => $this->featuredImage?->path,
             'categories' => $this->categories->pluck('name', 'slug'),
             'tags' => $this->tags->pluck('name', 'id'),

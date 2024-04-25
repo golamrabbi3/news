@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\News\GuestNewsController;
 use App\Http\Controllers\Api\News\NewsController;
+use App\Http\Controllers\Api\Profile\PasswordController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Roles\RolesController;
 use Illuminate\Support\Facades\Route;
@@ -23,11 +24,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('user')->middleware('auth:sanctum')->group(function () {
         Route::get('profile', [ProfileController::class, 'show']);
         Route::put('profile', [ProfileController::class, 'update']);
-        // TODO::change password functionality
+        Route::put('profile/password', PasswordController::class);
+        // TODO::make change password functionality
 
         Route::middleware('permission')->group(function () {
             Route::resource('roles', RolesController::class)->except('create', 'edit');
-            Route::resource('news', NewsController::class);
+            Route::resource('news', NewsController::class)->except('create', 'edit');
         });
     });
 });
