@@ -22,3 +22,9 @@ enum NewsStatus: String
     case Pending = "pending";
     case Published = "published";
 }
+
+enum MediaPath: String
+{
+    const Avatar = "media/avatar";
+    const News = "media/news";
+}

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Profile\ProfileRequest;
+use App\Services\FileService;
+use MediaPath;
 
 class ProfileController extends Controller
 {
@@ -21,11 +23,20 @@ class ProfileController extends Controller
     public function update(ProfileRequest $request)
     {
         if ($request->user()->update($request->validated())) {
-            // TODO::Make Service Provider to upload image
-            $avatar = "https://i.pravatar.cc/150?img={$request->user()->id}";
-            $request->user()->avatar()->updateOrCreate([
-                'path' => $avatar,
-            ]);
+            if ($request->hasFile('avatar')) {
+                $path = FileService::upload(
+                    file: $request->file('avatar'),
+                    path: MediaPath::Avatar,
+                    fileName: 'avatar',
+                    suffix: $request->user()->id(),
+                    disk: 'public',
+                    imageWidth: 150,
+                    imageHeight: 150,
+                );
+                $request->user()->avatar()->updateOrCreate([
+                    'path' => $path,
+                ]);
+            }
 
             return response()->json([
                 'message' => __('Profile updated successfully.'),

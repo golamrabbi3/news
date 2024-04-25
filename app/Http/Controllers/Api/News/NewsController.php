@@ -7,9 +7,12 @@ use App\Http\Requests\Api\News\NewsRequest;
 use App\Http\Resources\News\NewsCollection;
 use App\Http\Resources\News\NewsResource;
 use App\Models\News;
+use App\Services\FileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use MediaPath;
 use PaginatedNumber;
 use Throwable;
 
@@ -52,12 +55,10 @@ class NewsController extends Controller
             $news = News::create($parameters);
             $news->categories()->sync($request->input('categories', []));
             $news->tags()->sync($request->input('tags', []));
-            //TODO::upload featured image here using $request->featured_image
-            $news->featuredImage()->create([
-                'path' => fake()->imageUrl(),
-                'is_featured' => true,
-            ]);
 
+            if ($request->hasFile('featured_image')) {
+                $this->_uploadFeaturedImage($request->file('featured_image'), $news);
+            }
             DB::commit();
 
             return response()->json([
@@ -106,11 +107,10 @@ class NewsController extends Controller
             }
             $news->categories()->sync($request->input('categories', []));
             $news->tags()->sync($request->input('tags', []));
-            //TODO::upload featured image here using $request->featured_image
-            $news->featuredImage()->createOrUpdate([
-                'path' => fake()->imageUrl(),
-                'is_featured' => true,
-            ]);
+
+            if ($request->hasFile('featured_image')) {
+                $this->_uploadFeaturedImage($request->file('featured_image'), $news);
+            }
 
             DB::commit();
 
@@ -138,5 +138,29 @@ class NewsController extends Controller
         return response()->json([
             'message' => __('Failed to delete the news! Please try again.')
         ], 400);
+    }
+
+    private function _uploadFeaturedImage(UploadedFile $file, News $news): bool
+    {
+        $path = FileService::upload(
+            file: $file,
+            path: MediaPath::News,
+            fileName: 'news',
+            suffix: $news->id,
+            disk: 'public',
+            imageWidth: 1024,
+                imageHeight: 400
+        );
+
+        if ($path) {
+            $news->featuredImage()->updateOrCreate([
+                'path' => $path,
+                'is_featured' => true,
+            ]);
+
+            return true;
+        }
+
+        return false;
     }
 }
