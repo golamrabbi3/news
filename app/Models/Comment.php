@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comment extends Model
 {
@@ -16,23 +18,24 @@ class Comment extends Model
      */
     protected $fillable = [
         'user_id',
-        'detail',
         'news_id',
         'comment_id',
+        'description',
+        'is_approved',
     ];
 
-    public function user(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function news(): HasOne
+    public function news(): BelongsTo
     {
-        return $this->hasOne(News::class);
+        return $this->belongsTo(News::class);
     }
 
-    public function comment(): HasOne
+    public function comments(): HasMany
     {
-        return $this->hasOne(Comment::class);
+        return $this->hasMany(self::class);
     }
 }

@@ -2,30 +2,52 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
+use Roles;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
+        Artisan::call('permission:create');
+        $now = now();
+        $guardName = config('auth.defaults.guard');
 
-        $role = [
+        Role::insert([
             [
-                'name'=>'Super Admin',
-                'slug' => 'superadmin'
+                'name' => Roles::Admin,
+                'guard_name' => $guardName,
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
             [
-                'name'=>'User',
-                'slug' => 'user'
+                'name' => Roles::Moderator,
+                'guard_name' => $guardName,
+                'created_at' => $now,
+                'updated_at' => $now,
             ],
-        ];
+            [
+                'name' => Roles::Author,
+                'guard_name' => $guardName,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+            [
+                'name' => Roles::Viewer,
+                'guard_name' => $guardName,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ],
+        ]);
 
-        Role::insert($role);
+        $permissions = Permission::pluck('id', 'id')->all();
+        $adminRole = Role::where('name', Roles::Admin)->first();
+        $adminRole->syncPermissions($permissions);
     }
 }

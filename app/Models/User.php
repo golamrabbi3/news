@@ -4,44 +4,71 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    public $guard_name = 'api';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'country_id',
-        'first_name',
-        'last_name',
-        'address',
-        'city',
-        'state',
+        'name',
         'email',
-        'phone',
-        'is_email_verified',
         'password',
     ];
 
-    public function country(): HasOne
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
     {
-        return $this->hasOne(Country::class);
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 
-    public function roles(): BelongsToMany
+    public function getCreatedAtAttribute($value): string
     {
-        return $this->belongsToMany(Role::class);
+        return Carbon::parse($value)->toDateTimeString();
     }
 
     public function news(): HasMany
     {
         return $this->hasMany(News::class);
+    }
+
+    public function newsComments(): HasManyThrough
+    {
+        return $this->hasManyThrough(Comment::class, News::class);
+    }
+
+    public function avatar(): MorphOne
+    {
+        return $this->morphOne(Media::class, 'mediable');
     }
 }
