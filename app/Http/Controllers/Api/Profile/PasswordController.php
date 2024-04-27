@@ -13,7 +13,8 @@ class PasswordController extends Controller
     public function __invoke(PasswordRequest $request): JsonResponse
     {
         if ($request->user()->update(['password' => $request->password])) {
-            Mail::to($request->user()->email)->send(new PasswordChangedMail($request->user()->name));
+            Mail::to($request->user()->email)
+                ->send(new PasswordChangedMail($request->user()->name));
 
             return response()->json([
                 'message' => __('The password has been changed successfully.'),
