@@ -23,7 +23,7 @@ class ProfileRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'avatar' => 'image:jpg,jpeg,png|size:300',
+            'avatar' => 'image:jpg,jpeg,png|max:1024',
         ];
     }
 }

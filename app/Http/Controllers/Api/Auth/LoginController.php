@@ -25,13 +25,4 @@ class LoginController extends Controller
             ]
         ]);
     }
-
-    public function logout(): JsonResponse
-    {
-        request()->user()->currentAccessToken()->delete();
-
-        return response()->json([
-            'message' => __('The logout is successful.'),
-        ]);
-    }
 }

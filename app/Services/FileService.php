@@ -9,13 +9,13 @@ use Intervention\Image\ImageManager;
 
 class FileService
 {
-    public static function upload(
+    static public function upload(
         UploadedFile $file,
         String $path,
         String $fileName,
         String $prefix = "",
         String $suffix = "",
-        String $disk = config('filesystems.default'),
+        String $disk = 'local',
         ?int $imageWidth = null,
         ?int $imageHeight = null,
         int $imageQuality = 100,
