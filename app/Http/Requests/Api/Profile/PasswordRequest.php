@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Api\Profile;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class PasswordRequest extends FormRequest
@@ -27,9 +26,7 @@ class PasswordRequest extends FormRequest
             'old_password' => [
                 'required',
                 Password::min(8)->max(255),
-                Rule::exists('users')
-                    ->where('password', bcrypt($this->old_password))
-                    ->where('id', $this->user()->id()),
+                "hash_check:{$this->user()->password}",
             ],
             'password' => [
                 'required',
@@ -48,7 +45,7 @@ class PasswordRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'old_password.exists' => __("The old password didn't match."),
+            'old_password.hash_check' => __("The old password didn't match."),
         ];
     }
 }

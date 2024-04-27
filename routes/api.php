@@ -25,7 +25,7 @@ Route::prefix('v1')->group(function () {
         Route::get('profile', [ProfileController::class, 'show']);
         Route::post('profile', [ProfileController::class, 'update']);
         Route::get('profile/logout', LogoutController::class);
-        Route::put('profile/password', PasswordController::class);
+        Route::post('profile/password', PasswordController::class);
         Route::middleware('permission')->group(function () {
             Route::resource('roles', RolesController::class)->except('create', 'edit');
             Route::resource('news', NewsController::class)->except('create', 'edit');
