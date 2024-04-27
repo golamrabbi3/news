@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Profile\ProfileRequest;
 use App\Services\FileService;
+use Illuminate\Http\JsonResponse;
 use MediaPath;
 
 class ProfileController extends Controller
 {
-    public function show()
+    public function show(): JsonResponse
     {
-        $data = request()->user()->only(['name', 'email', 'created_at']);
+        $data = request()->user()->only(['name', 'email', 'created_at', 'updated_at']);
         $data['avatar'] = request()->user()->avatar?->path;
 
         return response()->json([
@@ -20,7 +21,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function update(ProfileRequest $request)
+    public function update(ProfileRequest $request): JsonResponse
     {
         if ($request->user()->update($request->validated())) {
             if ($request->hasFile('avatar')) {
@@ -28,7 +29,7 @@ class ProfileController extends Controller
                     file: $request->file('avatar'),
                     path: MediaPath::Avatar,
                     fileName: 'avatar',
-                    suffix: $request->user()->id(),
+                    suffix: $request->user()->id,
                     disk: 'public',
                     imageWidth: 150,
                     imageHeight: 150,

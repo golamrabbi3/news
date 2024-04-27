@@ -57,6 +57,11 @@ class User extends Authenticatable
         return Carbon::parse($value)->toDateTimeString();
     }
 
+    public function getUpdatedAtAttribute($value): string
+    {
+        return Carbon::parse($value)->diffForHumans();
+    }
+
     public function news(): HasMany
     {
         return $this->hasMany(News::class);
