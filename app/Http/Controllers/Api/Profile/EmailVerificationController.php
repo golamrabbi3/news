@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Auth\EmailVerificationRequest;
-use App\Mail\Api\Auth\EmailVerificationMail;
-use App\Mail\Api\Auth\EmailVerifiedMail;
+use App\Http\Requests\Api\Profile\EmailVerificationRequest;
+use App\Mail\Api\Profile\EmailVerificationMail;
+use App\Mail\Api\Profile\EmailVerifiedMail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 

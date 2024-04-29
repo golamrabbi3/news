@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\Api\Auth;
+namespace App\Mail\Api\Profile;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -8,15 +8,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EmailVerifiedMail extends Mailable
+class EmailVerificationMail extends Mailable
 {
+    use Queueable, SerializesModels;
+
     public String $name;
+    public int $OTP;
+
     /**
      * Create a new message instance.
      */
-    public function __construct(String $name)
+    public function __construct(String $name, int $OTP)
     {
         $this->name = $name;
+        $this->OTP = $OTP;
     }
 
     /**
@@ -25,7 +30,7 @@ class EmailVerifiedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __(":appName | Email Verification is Successful", ['appName' => config('app.name')]),
+            subject: __(":appName | Email Verification OTP", ['appName' => config('app.name')]),
         );
     }
 
@@ -35,7 +40,7 @@ class EmailVerifiedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.auth.email_verified',
+            markdown: 'emails.profile.email_verification',
         );
     }
 

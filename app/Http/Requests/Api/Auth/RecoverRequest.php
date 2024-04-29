@@ -39,4 +39,13 @@ class RecoverRequest extends FormRequest
             'password_confirmation' => 'required|same:password',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'otp.integer' => __('The password recovery OTP must be integer.'),
+            'otp.between' => __('The password recovery OTP is not correct.'),
+            'otp.hash_check' => __('The password recovery OTP is not correct.'),
+        ];
+    }
 }

@@ -37,7 +37,7 @@ class PasswordRecoveredMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.password_recovery',
+            markdown: 'emails.auth.password_recovered',
         );
     }
 

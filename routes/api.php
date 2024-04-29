@@ -16,8 +16,10 @@ Route::prefix('v1')->group(function () {
     Route::resource('news', GuestNewsController::class)->only('index', 'show');
     Route::post('register', RegisterController::class);
     Route::post('login', [LoginController::class, 'login']);
-    Route::post('password-recovery', [PasswordRecoveryController::class, 'index']);
-    Route::post('password-recovery/recover', [PasswordRecoveryController::class, 'recover']);
+    Route::post('password-recovery', [PasswordRecoveryController::class, 'index'])
+        ->middleware('throttle:3,10');
+    Route::post('password-recovery/recover', [PasswordRecoveryController::class, 'recover'])
+        ->middleware('throttle:3,10');
 
     Route::prefix('user')->middleware('auth:sanctum')->group(function () {
         Route::get('profile', [ProfileController::class, 'show']);
