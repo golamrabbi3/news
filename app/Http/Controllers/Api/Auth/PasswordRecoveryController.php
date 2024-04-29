@@ -19,12 +19,13 @@ class PasswordRecoveryController extends Controller
         $user = User::where('email', $request->email)->first();
         $OTP = random_int(100000, 999999);
 
-        Mail::to($request->email)->send(new PasswordRecoveryMail($user->name, $OTP));
+        Mail::to($user->email)->send(new PasswordRecoveryMail($user->name, $OTP));
 
         return response()->json([
             'message' => __('A password recovery OTP has been sent to your email address.'),
             'data' => [
                 'hash_code' => Hash::make($OTP),
+                'email' => $user->email,
             ],
         ]);
     }
