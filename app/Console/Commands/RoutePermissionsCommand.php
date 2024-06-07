@@ -30,12 +30,8 @@ class RoutePermissionsCommand extends Command
         $routes = Route::getRoutes()->getRoutes();
 
         foreach ($routes as $route) {
-            if ($route->getName() != '' && $route->getAction()['middleware']['0'] == 'api') {
-                $permission = Permission::where('name', $route->getName())->first();
-
-                if (is_null($permission)) {
-                    Permission::create(['name' => $route->getName()]);
-                }
+            if ($route->getName() && in_array('permission', $route->getAction()['middleware'])) {
+                Permission::firstOrCreate(['name' => $route->getName()],['guard_name' => 'api']);
             }
         }
 
