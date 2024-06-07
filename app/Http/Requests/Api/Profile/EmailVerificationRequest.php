@@ -21,9 +21,10 @@ class EmailVerificationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $cachedOTP = cache()->get("verification_" . $this->user()->email);
+
         return [
-            'hash_code' => 'required|string|max:255',
-            'otp' => 'required|integer|between:100000,999999|hash_check:' . $this->hash_code,
+            'otp' => "required|integer|between:100000,999999|in:$cachedOTP",
         ];
     }
 
@@ -32,7 +33,7 @@ class EmailVerificationRequest extends FormRequest
         return [
             'otp.integer' => __('The email verification OTP must be integer.'),
             'otp.between' => __('The email verification OTP is not correct.'),
-            'otp.hash_check' => __('The email verification OTP is not correct.'),
+            'otp.in' => __('The email verification OTP is not correct.'),
         ];
     }
 }

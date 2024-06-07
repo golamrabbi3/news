@@ -9,7 +9,6 @@ use App\Mail\Api\Auth\PasswordRecoveredMail;
 use App\Mail\Api\Auth\PasswordRecoveryMail;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class PasswordRecoveryController extends Controller
@@ -18,15 +17,12 @@ class PasswordRecoveryController extends Controller
     {
         $user = User::where('email', $request->email)->first();
         $OTP = random_int(100000, 999999);
+        cache()->put("recovery_" . $user->email, $OTP, 1800);
 
         Mail::to($user->email)->send(new PasswordRecoveryMail($user->name, $OTP));
 
         return response()->json([
             'message' => __('A password recovery OTP has been sent to your email address.'),
-            'data' => [
-                'hash_code' => Hash::make($OTP),
-                'email' => $user->email,
-            ],
         ]);
     }
 
@@ -36,6 +32,7 @@ class PasswordRecoveryController extends Controller
 
         if ($user->update(['password' => $request->password])) {
             $user->tokens()->delete();
+            cache()->forget("recovery_" . $user->email);
             Mail::to($user->email)->send(new PasswordRecoveredMail($user->name));
 
             return response()->json([

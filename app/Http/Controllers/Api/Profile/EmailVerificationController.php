@@ -20,14 +20,12 @@ class EmailVerificationController extends Controller
         }
 
         $OTP = random_int(100000, 999999);
+        cache()->put("verification_" . request()->user()->email, $OTP, 1800);
         Mail::to(request()->user()->email)
             ->send(new EmailVerificationMail(request()->user()->name, $OTP));
 
         return response()->json([
             'message' => __('An email verification code has been sent to your email address.'),
-            'data' => [
-                'hash_code' => bcrypt($OTP),
-            ]
         ]);
     }
 
@@ -40,6 +38,7 @@ class EmailVerificationController extends Controller
         }
 
         if ($request->user()->update(['email_verified_at' => now()])) {
+            cache()->forget("verification_" . $request->user()->email);
             Mail::to($request->user()->email)->send(new EmailVerifiedMail($request->user()->name));
 
             return response()->json([
