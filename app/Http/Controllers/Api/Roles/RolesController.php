@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\Roles;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Roles\RoleRequest;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Throwable;
 
 class RolesController extends Controller
 {
@@ -13,61 +16,76 @@ class RolesController extends Controller
     {
         return response()->json([
             'message' => __('Fetched roles successfully.'),
-            'data' => Role::orderByDesc('created_at')->all(),
+            'data' => Role::orderByDesc('created_at')->get(),
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(RoleRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
+        try {
+            DB::beginTransaction();
+            $role = Role::create([
+                'name' => $request->name,
+                'guard_name' => 'api',
+            ]);
+            $role->syncPermissions($request->permissions);
+            DB::commit();
 
-        $role = Role::create(['name' => $request->name]);
-        $role->syncPermissions($request->permission);
+            return response()->json([
+                'message' => __('The role has been created successfully.'),
+                'data' => $role->load('permissions'),
+            ]);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            report($e);
 
-        return response()->json([
-            'message' => __('The role has been created successfully.'),
-            'data' => [
-                'role' => $role,
-                'permissions' => $role->permissions,
-            ],
-        ]);
+            return response()->json([
+                'message' => __('Failed to create the role! Please try again.'),
+            ], 400);
+        }
     }
 
     public function show(Role $role): JsonResponse
     {
         return response()->json([
             'message' => __("Fetched role's permissions successfully."),
-            'data' => [
-                'role' => $role,
-                'permissions' => $role->permissions,
-            ],
+            'data' => $role->load('permissions'),
         ]);
     }
 
-    public function update(Role $role, Request $request): JsonResponse
+    public function update(Role $role, RoleRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
+        try {
+            DB::beginTransaction();
+            if (!$role->update($request->only('name'))) {
+                throw new Exception(__("Failed to update the role name!"));
+            }
+            $role->syncPermissions($request->permissions);
+            DB::commit();
 
-        $role->update($request->only('name'));
-        $role->syncPermissions($request->permission);
+            return response()->json([
+                'message' => __("The role has been updated successfully."),
+            ]);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            report($e);
 
-        return response()->json([
-            'message' => __("The role has been updated successfully."),
-        ]);
+            return response()->json([
+                'message' => __('Failed to update the role! Please try again.'),
+            ], 400);
+        }
     }
 
     public function destroy(Role $role): JsonResponse
     {
-        $role->delete();
+        if ($role->delete()) {
+            return response()->json([
+                'message' => __("The role has been deleted successfully."),
+            ]);
+        }
 
         return response()->json([
-            'message' => __("The role has been deleted successfully."),
-        ]);
+            'message' => __("Failed to delete the role! Please try again."),
+        ], 400);
     }
 }
