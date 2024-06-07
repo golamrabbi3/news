@@ -17,9 +17,9 @@ Route::prefix('v1')->group(function () {
     Route::post('register', RegisterController::class);
     Route::post('login', [LoginController::class, 'login']);
     Route::post('password-recovery', [PasswordRecoveryController::class, 'index'])
-        ->middleware('throttle:3,10');
+        ->middleware('throttle:3,1');
     Route::post('password-recovery/recover', [PasswordRecoveryController::class, 'recover'])
-        ->middleware('throttle:3,10');
+        ->middleware('throttle:3,1');
 
     Route::prefix('user')->middleware('auth:sanctum')->group(function () {
         Route::get('profile', [ProfileController::class, 'show']);
@@ -27,7 +27,7 @@ Route::prefix('v1')->group(function () {
         Route::get('profile/logout', LogoutController::class);
         Route::post('profile/password', PasswordController::class);
         Route::get('profile/email-verification', [EmailVerificationController::class, 'index'])
-            ->middleware('throttle:1,2');
+            ->middleware('throttle:3,1');
         Route::post('profile/email-verification', [EmailVerificationController::class, 'verify'])
             ->middleware('throttle:3,1');
         Route::middleware('permission')->group(function () {

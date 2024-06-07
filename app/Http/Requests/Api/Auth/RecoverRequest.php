@@ -22,10 +22,11 @@ class RecoverRequest extends FormRequest
      */
     public function rules(): array
     {
+        $cachedOTP = cache()->get("recovery_" . $this->email);
+
         return [
             'email' => 'required|email:rfc,dns|max:255|exists:users,email',
-            'hash_code' => 'required|string|max:255',
-            'otp' => 'required|integer|between:100000,999999|hash_check:' . $this->hash_code,
+            'otp' => "required|integer|between:100000,999999|in:$cachedOTP",
             'password' => [
                 'required',
                 Password::min(8)
@@ -45,7 +46,7 @@ class RecoverRequest extends FormRequest
         return [
             'otp.integer' => __('The password recovery OTP must be integer.'),
             'otp.between' => __('The password recovery OTP is not correct.'),
-            'otp.hash_check' => __('The password recovery OTP is not correct.'),
+            'otp.in' => __('The password recovery OTP is not correct.'),
         ];
     }
 }
