@@ -13,9 +13,7 @@ class PermissionsController extends Controller
     {
         return response()->json([
             'message' => __('Fetched all permissions successfully.'),
-            'data' => [
-                'permission' => Permission::all(),
-            ],
+            'data' => Permission::get(),
         ]);
     }
 
