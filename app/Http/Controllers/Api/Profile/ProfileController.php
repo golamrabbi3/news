@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function show(): JsonResponse
     {
-        $data = request()->user()->only(['name', 'email', 'created_at', 'updated_at']);
+        $data = request()->user()->only(['full_name', 'email', 'email_verified_at', 'is_super_admin', 'created_at', 'updated_at']);
         $data['avatar'] = request()->user()->avatar?->path;
 
         return response()->json([

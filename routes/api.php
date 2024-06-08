@@ -35,6 +35,7 @@ Route::prefix('v1')->group(function () {
         Route::post('profile/email-verification', [EmailVerificationController::class, 'verify'])
             ->middleware('throttle:3,1')
             ->name('email-verification.verify');
+            
         Route::middleware('permission')->group(function () {
             Route::get('roles/permissions', PermissionsController::class)
                 ->name('roles.permissions');

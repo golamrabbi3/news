@@ -15,33 +15,17 @@ class Permission
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $permission = null, $guard = null)
+    public function handle(Request $request, Closure $next)
     {
-        $authGuard = app('auth')->guard($guard);
+        $authGuard = app('auth')->guard('sanctum');
+        $permission = $request->route()->getName();
 
         if ($authGuard->guest()) {
             throw UnauthorizedException::notLoggedIn();
+        } else if(auth()->user()->is_super_admin || $authGuard->user()->can($permission)) {
+            return $next($request);
         }
 
-        if (!is_null($permission)) {
-            $permissions = is_array($permission)
-                ? $permission
-                : explode('|', $permission);
-        }
-
-        if (is_null($permission)) {
-            $permission = $request->route()->getName();
-
-            $permissions = array($permission);
-        }
-
-
-        foreach ($permissions as $permission) {
-            if ($authGuard->user()->can($permission)) {
-                return $next($request);
-            }
-        }
-
-        throw UnauthorizedException::forPermissions($permissions);
+        throw UnauthorizedException::forPermissions([$permission]);
     }
 }

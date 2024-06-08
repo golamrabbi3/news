@@ -13,13 +13,13 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         $user = User::create([
-            'name' => "Super Admin",
+            'first_name' => "Super",
+            'last_name' => "Admin",
             'email' => "superadmin@codemen.org",
             'password' => 'P@ssw0rd',
             'email_verified_at' => now(),
+            'is_super_admin' => true,
         ]);
-
-        $user->assignRole([1]);
 
         $user->avatar()->create([
             'path' => 'https://i.pravatar.cc/150?img=1',
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
                     'path' => "https://i.pravatar.cc/150?img={$user->id}",
                 ]);
 
-                $user->assignRole(random_int(2, 4));
+                $user->assignRole(random_int(1, 4));
             });
     }
 }
