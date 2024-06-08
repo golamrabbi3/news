@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Profile\EmailVerificationController;
 use App\Http\Controllers\Api\Profile\LogoutController;
 use App\Http\Controllers\Api\Profile\PasswordController;
 use App\Http\Controllers\Api\Profile\ProfileController;
+use App\Http\Controllers\Api\Roles\PermissionsController;
 use App\Http\Controllers\Api\Roles\RolesController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +36,8 @@ Route::prefix('v1')->group(function () {
             ->middleware('throttle:3,1')
             ->name('email-verification.verify');
         Route::middleware('permission')->group(function () {
+            Route::get('roles/permissions', PermissionsController::class)
+                ->name('roles.permissions');
             Route::resource('roles', RolesController::class)->except('create', 'edit');
             Route::resource('news', NewsController::class)->except('create', 'edit');
         });
