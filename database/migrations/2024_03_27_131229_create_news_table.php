@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->index();
             $table->longText('description');
             $table->string('status')
+                ->index()
                 ->default('pending')
                 ->comment('draft|pending|published');
 
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->cascadeOnDelete();
 
             $table->timestamps();
         });

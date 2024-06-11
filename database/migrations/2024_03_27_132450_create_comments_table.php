@@ -13,29 +13,25 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
-            $table->boolean('is_approved')->default(false);
-
-            $table->foreignId('user_id')
-                ->unsigned()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
-            $table->foreignId('news_id')
-                ->unsigned()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
+            $table->unsignedBigInteger('commentable_id');
+            $table->string('commentable_type');
             $table->foreignId('comment_id')
                 ->unsigned()
                 ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
-
+                ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->unsigned()
+                ->nullable()
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->text('description');
+            $table->boolean('is_approved')->default(false)->index();
             $table->timestamps();
+
+            $table->index(['commentable_id', 'commentable_type']);
         });
     }
 

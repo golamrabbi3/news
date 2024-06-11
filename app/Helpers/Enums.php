@@ -6,6 +6,7 @@ enum PaginatedNumber: int
     const GuestComments = 5;
     const News = 20;
     const Comments = 20;
+    const Categories = 20;
 }
 
 enum Roles: String

@@ -18,7 +18,6 @@ class CommentFactory extends Factory
     {
         return [
             'user_id' => random_int(1, 4),
-            'news_id' => random_int(1, 20),
             'comment_id' => null,
             'description' => fake()->sentences(asText: true),
             'is_approved' => random_int(0, 1),

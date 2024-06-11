@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\Categories\CategoriesController;
+use App\Http\Controllers\Api\Comments\CommentsController;
 use App\Http\Controllers\Api\News\GuestNewsController;
 use App\Http\Controllers\Api\News\NewsController;
 use App\Http\Controllers\Api\Profile\EmailVerificationController;
@@ -11,6 +13,7 @@ use App\Http\Controllers\Api\Profile\PasswordController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Roles\PermissionsController;
 use App\Http\Controllers\Api\Roles\RolesController;
+use App\Http\Controllers\Api\Tags\TagsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -35,11 +38,14 @@ Route::prefix('v1')->group(function () {
         Route::post('profile/email-verification', [EmailVerificationController::class, 'verify'])
             ->middleware('throttle:3,1')
             ->name('email-verification.verify');
-            
+
         Route::middleware('permission')->group(function () {
             Route::get('roles/permissions', PermissionsController::class)
                 ->name('roles.permissions');
             Route::resource('roles', RolesController::class)->except('create', 'edit');
+            Route::resource('categories', CategoriesController::class)->except('create', 'edit');
+            Route::resource('tags', TagsController::class)->except('create', 'edit');
+            Route::resource('comments', CommentsController::class)->except('create', 'edit');
             Route::resource('news', NewsController::class)->except('create', 'edit');
         });
     });

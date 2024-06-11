@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -17,25 +18,26 @@ class Comment extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'news_id',
+        'commentable_id',
+        'commentable_type',
         'comment_id',
+        'user_id',
         'description',
         'is_approved',
     ];
 
-    public function user(): BelongsTo
+    public function commentable(): MorphTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function news(): BelongsTo
-    {
-        return $this->belongsTo(News::class);
+        return $this->morphTo();
     }
 
     public function comments(): HasMany
     {
         return $this->hasMany(self::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
