@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('news_tag', function (Blueprint $table) {
-            $table->foreignId('news_id')
-                ->unsigned()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+        Schema::create('taggables', function (Blueprint $table) {
             $table->foreignId('tag_id')
                 ->unsigned()
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->cascadeOnDelete();
+            $table->unsignedBigInteger('taggable_id');
+            $table->string('taggable_type');
             $table->timestamps();
+            $table->index(['taggable_id', 'taggable_type']);
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('news_tag');
+        Schema::dropIfExists('taggables');
     }
 };

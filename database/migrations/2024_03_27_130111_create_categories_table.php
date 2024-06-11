@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->tinyInteger('order')->unique();
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(false)->index();
             $table->foreignId('category_id')
                 ->unsigned()
                 ->nullable()
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->cascadeOnDelete();
 
             $table->timestamps();
         });

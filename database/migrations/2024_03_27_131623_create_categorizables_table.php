@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_news', function (Blueprint $table) {
+        Schema::create('categorizables', function (Blueprint $table) {
             $table->foreignId('category_id')
                 ->unsigned()
                 ->constrained()
                 ->cascadeOnUpdate()
-                ->restrictOnDelete();
-            $table->foreignId('news_id')
-                ->unsigned()
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+                ->cascadeOnDelete();
+            $table->unsignedBigInteger('categorizable_id');
+            $table->string('categorizable_type');
             $table->timestamps();
+            $table->index(['categorizable_id', 'categorizable_type']);
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_news');
+        Schema::dropIfExists('categorizables');
     }
 };
