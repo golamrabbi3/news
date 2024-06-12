@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->tinyInteger('order')->unique();
+            $table->string('name')->unique();
             $table->boolean('is_active')->default(false)->index();
             $table->foreignId('category_id')
                 ->unsigned()

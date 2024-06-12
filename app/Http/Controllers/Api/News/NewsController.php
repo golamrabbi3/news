@@ -46,12 +46,11 @@ class NewsController extends Controller
      */
     public function store(NewsRequest $request): JsonResponse
     {
-        $parameters = $request->only('title', 'description', 'status');
-        $parameters['user_id'] = $request->user()->id();
-
         DB::beginTransaction();
 
         try {
+            $parameters = $request->only('title', 'description', 'status');
+            $parameters['user_id'] = $request->user()->id();
             $news = News::create($parameters);
             $news->categories()->sync($request->input('categories', []));
             $news->tags()->sync($request->input('tags', []));
@@ -131,10 +130,14 @@ class NewsController extends Controller
      */
     public function destroy(News $news): JsonResponse
     {
-        if ($news->delete()) {
-            return response()->json(['message' => __('The news has been deleted successfully.')]);
+        try {
+            if ($news->delete()) {
+                return response()->json(['message' => __('The news has been deleted successfully.')]);
+            }
+        } catch(Throwable $e) {
+            report($e);
         }
-
+        
         return response()->json([
             'message' => __('Failed to delete the news! Please try again.')
         ], 400);
