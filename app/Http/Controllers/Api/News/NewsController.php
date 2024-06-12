@@ -9,6 +9,7 @@ use App\Http\Resources\News\NewsResource;
 use App\Models\News;
 use App\Services\FileService;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,9 @@ class NewsController extends Controller
                 'tags',
                 'featuredImage'
             )
-                ->withCount('comments')
+                ->withCount([
+                    'comments' => (fn (Builder $query) => $query->whereIsApproved(true)),
+                ])
                 ->latest()
                 ->paginate(PaginatedNumber::News)
         );
@@ -50,7 +53,7 @@ class NewsController extends Controller
 
         try {
             $parameters = $request->only('title', 'description', 'status');
-            $parameters['user_id'] = $request->user()->id();
+            $parameters['user_id'] = $request->user()->id;
             $news = News::create($parameters);
             $news->categories()->sync($request->input('categories', []));
             $news->tags()->sync($request->input('tags', []));
@@ -84,8 +87,10 @@ class NewsController extends Controller
             'categories',
             'tags',
             'featuredImage',
-            'comments',
-        );
+            'comments.user',
+        )->loadCount([
+            'comments' => (fn(Builder $query) => $query->whereIsApproved(true)),
+        ]);
 
         return response()->json([
             'message' => __('Fetched news successfully.'),
@@ -131,13 +136,17 @@ class NewsController extends Controller
     public function destroy(News $news): JsonResponse
     {
         try {
+            $news->categories()->delete();
+            $news->tags()->delete();
+            $news->featuredImage()->delete();
+
             if ($news->delete()) {
                 return response()->json(['message' => __('The news has been deleted successfully.')]);
             }
         } catch(Throwable $e) {
             report($e);
         }
-        
+
         return response()->json([
             'message' => __('Failed to delete the news! Please try again.')
         ], 400);

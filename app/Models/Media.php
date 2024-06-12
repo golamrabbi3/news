@@ -30,8 +30,11 @@ class Media extends Model
         return $this->morphTo();
     }
 
-    public function getPathAttribute($value)
+    public function getPathAttribute($value): String|null
     {
-        return $value ? asset("storage/$value") : null;
+        return !$value ? null : (
+            str($value)->startsWith('http') ?
+                $value : asset("storage/$value")
+        );
     }
 }
