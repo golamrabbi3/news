@@ -119,6 +119,8 @@ class CategoriesController extends Controller
     public function destroy(Category $category)
     {
         try {
+            $category->image()->delete();
+
             if ($category->delete()) {
                 return response()->json(['message' => __('The category has been deleted successfully.')]);
             }

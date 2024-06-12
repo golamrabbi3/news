@@ -25,6 +25,11 @@ class News extends Model
         'status',
     ];
 
+    public function excerpt()
+    {
+        return str_replace("\n", "", str()->limit(strip_tags($this->description), 100));
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

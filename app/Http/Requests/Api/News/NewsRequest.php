@@ -30,9 +30,11 @@ class NewsRequest extends FormRequest
                 "required",
                 Rule::enum(NewsStatus::class),
             ],
-            'featured_image' => "image:jpg,jpeg,png|size:512",
             'categories' => "array|max:10",
+            'categories.*' => "exists:categories,id",
             'tags' => "array|max:10",
+            'tags.*' => "exists:tags,id",
+            'featured_image' => "image:jpg,jpeg,png|max:1024",
         ];
     }
 }

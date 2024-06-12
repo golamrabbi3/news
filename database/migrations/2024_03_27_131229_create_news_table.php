@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->index();
+            $table->string('title')->unique();
             $table->longText('description');
             $table->string('status')
                 ->index()
