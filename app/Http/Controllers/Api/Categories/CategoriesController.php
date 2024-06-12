@@ -79,7 +79,7 @@ class CategoriesController extends Controller
             'image',
             'category',
             'categories',
-        )->withCount('news', 'categories');
+        )->loadCount('news', 'categories');
 
         return response()->json([
             'message' => __('Fetched category successfully.'),
