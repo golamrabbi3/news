@@ -20,7 +20,6 @@ class TagFactory extends Factory
 
         return [
             'name' => $name,
-            'slug' => str($name)->slug(),
         ];
     }
 }

@@ -27,7 +27,7 @@ class NewsResource extends JsonResource
             'author_image' => $this->user?->profileImage?->path,
             'comments_count' => $this->comments_count ?? 0,
             'featured_image' => $this->featuredImage?->path,
-            'categories' => $this->categories->pluck('name', 'slug'),
+            'categories' => $this->categories->pluck('name', 'id'),
             'tags' => $this->tags->pluck('name', 'id'),
             'comments' => $this->when(
                 $request->news,

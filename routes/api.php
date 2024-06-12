@@ -40,8 +40,7 @@ Route::prefix('v1')->group(function () {
             ->name('email-verification.verify');
 
         Route::middleware('permission')->group(function () {
-            Route::get('roles/permissions', PermissionsController::class)
-                ->name('roles.permissions');
+            Route::get('roles/permissions', PermissionsController::class)->name('roles.permissions');
             Route::resource('roles', RolesController::class)->except('create', 'edit');
             Route::resource('categories', CategoriesController::class)->except('create', 'edit');
             Route::resource('tags', TagsController::class)->except('create', 'edit');
