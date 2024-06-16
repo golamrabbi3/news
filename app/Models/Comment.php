@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Arr;
 
 class Comment extends Model
 {
@@ -31,6 +32,11 @@ class Comment extends Model
         return $this->morphTo();
     }
 
+    public function comment(): BelongsTo
+    {
+        return $this->belongsTo(self::class);
+    }
+
     public function comments(): HasMany
     {
         return $this->hasMany(self::class);
@@ -39,5 +45,19 @@ class Comment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getCommentableTypeAttribute(String $value): String
+    {
+        return Arr::last(explode("\\", $value));
+    }
+
+    public function excerpt()
+    {
+        return str_replace(
+            "\n",
+            "",
+            str()->limit(strip_tags($this->description), 100)
+        );
     }
 }
