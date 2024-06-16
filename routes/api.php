@@ -44,7 +44,7 @@ Route::prefix('v1')->group(function () {
             Route::resource('roles', RolesController::class)->except('create', 'edit');
             Route::resource('categories', CategoriesController::class)->except('create', 'edit');
             Route::resource('tags', TagsController::class)->except('create', 'edit');
-            Route::resource('comments', CommentsController::class)->except('create', 'edit');
+            Route::resource('comments', CommentsController::class)->except('create', 'store', 'edit');
             Route::resource('news', NewsController::class)->except('create', 'edit');
         });
     });
