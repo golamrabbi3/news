@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\PasswordRecoveryController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Categories\CategoriesController;
 use App\Http\Controllers\Api\Comments\CommentsController;
+use App\Http\Controllers\Api\News\CommentsController as NewsCommentsController;
 use App\Http\Controllers\Api\News\GuestNewsController;
 use App\Http\Controllers\Api\News\NewsController;
 use App\Http\Controllers\Api\Profile\EmailVerificationController;
@@ -45,6 +46,7 @@ Route::prefix('v1')->group(function () {
             Route::resource('categories', CategoriesController::class)->except('create', 'edit');
             Route::resource('tags', TagsController::class)->except('create', 'edit');
             Route::resource('comments', CommentsController::class)->except('create', 'store', 'edit');
+            Route::resource('news/{news}/comments', NewsCommentsController::class)->except('create', 'show', 'edit');
             Route::resource('news', NewsController::class)->except('create', 'edit');
         });
     });
