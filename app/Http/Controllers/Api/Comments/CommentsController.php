@@ -80,9 +80,9 @@ class CommentsController extends Controller
     public function destroy(Comment $comment)
     {
         try {
-            $comment->comments()->delete();
-
             if ($comment->delete()) {
+                $comment->comments()->delete();
+
                 return response()->json(['message' => __('The comment has been deleted successfully.')]);
             }
         } catch (Throwable $e) {

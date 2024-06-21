@@ -89,7 +89,7 @@ class NewsController extends Controller
             'featuredImage',
             'comments.user',
         )->loadCount([
-            'comments' => (fn(Builder $query) => $query->whereIsApproved(true)),
+            'comments' => (fn (Builder $query) => $query->whereIsApproved(true)),
         ]);
 
         return response()->json([
@@ -136,14 +136,14 @@ class NewsController extends Controller
     public function destroy(News $news): JsonResponse
     {
         try {
-            $news->categories()->delete();
-            $news->tags()->delete();
-            $news->featuredImage()->delete();
-
             if ($news->delete()) {
+                $news->categories()->delete();
+                $news->tags()->delete();
+                $news->featuredImage()->delete();
+
                 return response()->json(['message' => __('The news has been deleted successfully.')]);
             }
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             report($e);
         }
 
@@ -161,7 +161,7 @@ class NewsController extends Controller
             suffix: $news->id,
             disk: 'public',
             imageWidth: 1024,
-                imageHeight: 400
+            imageHeight: 400
         );
 
         if ($path) {

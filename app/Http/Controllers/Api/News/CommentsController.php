@@ -78,9 +78,10 @@ class CommentsController extends Controller
     {
         try {
             $comment = $news->comments()->whereId($id)->whereUserId(request()->user()->id)->first();
-            
+
             if ($comment && $comment->delete()) {
                 $comment->comments()->delete();
+                
                 return response()->json(['message' => __('The comment has been deleted successfully.')]);
             }
         } catch (Throwable $e) {
