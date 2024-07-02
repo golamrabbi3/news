@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Helpers;
+
+class Enums {}
+
 enum PaginatedNumber: int
 {
     const GuestNews = 10;
