@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\News;
 
+use App\Helpers\MediaPath;
+use App\Helpers\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\News\NewsRequest;
 use App\Http\Resources\News\NewsCollection;
@@ -13,9 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use MediaPath;
-use PaginatedNumber;
-use Throwable;
 
 class NewsController extends Controller
 {
@@ -67,7 +66,7 @@ class NewsController extends Controller
                 'message' => __('The news has been created successfully.'),
                 'data' => new NewsResource($news),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             report($e);
         }
@@ -122,7 +121,7 @@ class NewsController extends Controller
                 'message' => __('The news has been updated successfully.'),
                 'data' => new NewsResource($news),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             report($e);
         }
@@ -143,7 +142,7 @@ class NewsController extends Controller
 
                 return response()->json(['message' => __('The news has been deleted successfully.')]);
             }
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 

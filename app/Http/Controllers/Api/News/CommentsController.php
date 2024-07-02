@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\News;
 
+use App\Helpers\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\News\CommentRequest;
 use App\Http\Resources\Comments\CommentResource;
 use App\Models\News;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use PaginatedNumber;
-use Throwable;
 
 class CommentsController extends Controller
 {
@@ -81,10 +81,10 @@ class CommentsController extends Controller
 
             if ($comment && $comment->delete()) {
                 $comment->comments()->delete();
-                
+
                 return response()->json(['message' => __('The comment has been deleted successfully.')]);
             }
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 

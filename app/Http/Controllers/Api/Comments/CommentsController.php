@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\Comments;
 
+use App\Helpers\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Comments\CommentResource;
 use App\Models\Comment;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use PaginatedNumber;
-use Throwable;
 
 class CommentsController extends Controller
 {
@@ -29,7 +29,7 @@ class CommentsController extends Controller
                 'message' => __('Fetched comment list successfully.'),
                 'data' => $data->response()->getData(true),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
 
             return response()->json([
@@ -85,7 +85,7 @@ class CommentsController extends Controller
 
                 return response()->json(['message' => __('The comment has been deleted successfully.')]);
             }
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 

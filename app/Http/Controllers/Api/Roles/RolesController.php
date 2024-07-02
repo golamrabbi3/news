@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use Throwable;
 
 class RolesController extends Controller
 {
@@ -35,7 +34,7 @@ class RolesController extends Controller
                 'message' => __('The role has been created successfully.'),
                 'data' => $role->load('permissions'),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             report($e);
 
@@ -66,7 +65,7 @@ class RolesController extends Controller
             return response()->json([
                 'message' => __("The role has been updated successfully."),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             report($e);
 
@@ -78,10 +77,14 @@ class RolesController extends Controller
 
     public function destroy(Role $role): JsonResponse
     {
-        if ($role->delete()) {
-            return response()->json([
-                'message' => __("The role has been deleted successfully."),
-            ]);
+        try {
+            if ($role->delete()) {
+                return response()->json([
+                    'message' => __("The role has been deleted successfully."),
+                ]);
+            }
+        } catch (Exception $e) {
+            report($e);
         }
 
         return response()->json([

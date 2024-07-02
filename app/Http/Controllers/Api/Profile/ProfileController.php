@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\Profile;
 
+use App\Helpers\MediaPath;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Profile\ProfileRequest;
 use App\Services\FileService;
 use Illuminate\Http\JsonResponse;
-use MediaPath;
 
 class ProfileController extends Controller
 {

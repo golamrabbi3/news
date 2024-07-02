@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\Roles;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
-use Roles;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 

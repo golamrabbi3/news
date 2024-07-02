@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Helpers\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Roles;
-use Throwable;
 
 class RegisterController extends Controller
 {
@@ -24,7 +24,7 @@ class RegisterController extends Controller
                     'token_type' => 'Bearer Token',
                 ]
             ], 201);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
 
             return response()->json([

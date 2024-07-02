@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api\Tags;
 
+use App\Helpers\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tags\TagRequest;
 use App\Http\Resources\Tags\TagCollection;
 use App\Http\Resources\Tags\TagResource;
 use App\Models\Tag;
 use Exception;
-use PaginatedNumber;
-use Throwable;
 
 class TagsController extends Controller
 {
@@ -29,7 +28,7 @@ class TagsController extends Controller
                 'message' => __('Fetched tag list successfully.'),
                 'data' => $data->response()->getData(true),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
 
             return response()->json([
@@ -49,7 +48,7 @@ class TagsController extends Controller
                 'message' => __('The tag has been created successfully.'),
                 'data' => new TagResource($tag),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 
@@ -77,6 +76,7 @@ class TagsController extends Controller
     public function update(TagRequest $request, Tag $tag)
     {
         $message = __('Failed to update the tag! Please try again.');
+
         try {
             if (!$tag->update($request->only('name'))) {
                 throw new Exception($message);
@@ -86,7 +86,7 @@ class TagsController extends Controller
                 'message' => __('The tag has been updated successfully.'),
                 'data' => new TagResource($tag),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 
@@ -102,7 +102,7 @@ class TagsController extends Controller
             if ($tag->delete()) {
                 return response()->json(['message' => __('The tag has been deleted successfully.')]);
             }
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 

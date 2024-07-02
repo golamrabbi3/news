@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Helpers\NewsStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use NewsStatus;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\News>

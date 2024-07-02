@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Categories;
 
+use App\Helpers\MediaPath;
+use App\Helpers\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Categories\CategoryRequest;
 use App\Http\Resources\Categories\CategoryCollection;
@@ -10,9 +12,6 @@ use App\Models\Category;
 use App\Services\FileService;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use MediaPath;
-use PaginatedNumber;
-use Throwable;
 
 class CategoriesController extends Controller
 {
@@ -36,7 +35,7 @@ class CategoriesController extends Controller
                 'message' => __('Fetched category list successfully.'),
                 'data' => $data->response()->getData(true),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
 
             return response()->json([
@@ -61,7 +60,7 @@ class CategoriesController extends Controller
                 'message' => __('The category has been created successfully.'),
                 'data' => new CategoryResource($category),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 
@@ -106,7 +105,7 @@ class CategoriesController extends Controller
                 'message' => __('The category has been updated successfully.'),
                 'data' => new CategoryResource($category),
             ]);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 
@@ -125,7 +124,7 @@ class CategoriesController extends Controller
 
                 return response()->json(['message' => __('The category has been deleted successfully.')]);
             }
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             report($e);
         }
 

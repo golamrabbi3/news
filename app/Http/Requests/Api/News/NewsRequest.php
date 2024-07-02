@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Api\News;
 
+use App\Helpers\NewsStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use NewsStatus;
 
 class NewsRequest extends FormRequest
 {

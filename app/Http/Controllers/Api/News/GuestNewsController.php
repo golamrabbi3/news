@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\News;
 
+use App\Helpers\NewsStatus;
+use App\Helpers\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\News\NewsCollection;
 use App\Http\Resources\News\NewsResource;
 use App\Models\News;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
-use NewsStatus;
-use PaginatedNumber;
 
 class GuestNewsController extends Controller
 {

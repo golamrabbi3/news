@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Roles;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
-use Throwable;
 
 class PermissionsController extends Controller
 {
@@ -19,7 +19,7 @@ class PermissionsController extends Controller
                 'message' => __('All permissions are synchronized successfully.'),
                 'data' => Permission::get(),
             ]);
-        } catch(Throwable $e) {
+        } catch(Exception $e) {
             report($e);
 
             return response()->json([
