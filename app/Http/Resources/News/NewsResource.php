@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\News;
 
-use App\Helpers\PaginatedNumber;
+use App\Enums\PaginatedNumber;
 use App\Http\Resources\Comments\CommentResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

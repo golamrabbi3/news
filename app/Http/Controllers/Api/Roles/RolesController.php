@@ -37,11 +37,11 @@ class RolesController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to create the role! Please try again.'),
-            ], 400);
         }
+
+        return response()->json([
+            'message' => __('Failed to create the role! Please try again.'),
+        ], 400);
     }
 
     public function show(Role $role): JsonResponse
@@ -68,11 +68,11 @@ class RolesController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to update the role! Please try again.'),
-            ], 400);
         }
+
+        return response()->json([
+            'message' => __('Failed to update the role! Please try again.'),
+        ], 400);
     }
 
     public function destroy(Role $role): JsonResponse

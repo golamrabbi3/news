@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Profile\PasswordController;
 use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Roles\PermissionsController;
 use App\Http\Controllers\Api\Roles\RolesController;
+use App\Http\Controllers\Api\Settings\SettingsController;
 use App\Http\Controllers\Api\Tags\TagsController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +42,7 @@ Route::prefix('v1')->group(function () {
             ->name('email-verification.verify');
 
         Route::middleware('permission')->group(function () {
+            Route::resource('settings', SettingsController::class)->only('index', 'store');
             Route::get('roles/permissions', PermissionsController::class)->name('roles.permissions');
             Route::resource('roles', RolesController::class)->except('create', 'edit');
             Route::resource('categories', CategoriesController::class)->except('create', 'edit');

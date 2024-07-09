@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Tags;
 
-use App\Helpers\PaginatedNumber;
+use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tags\TagRequest;
 use App\Http\Resources\Tags\TagCollection;
@@ -30,11 +30,11 @@ class TagsController extends Controller
             ]);
         } catch (Exception $e) {
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to fetch tag list.'),
-            ]);
         }
+
+        return response()->json([
+            'message' => __('Failed to fetch tag list.'),
+        ]);
     }
     /**
      * Store a newly created resource in storage.

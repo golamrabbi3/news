@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use App\Helpers\PaginatedNumber;
+use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\News\CommentRequest;
 use App\Http\Resources\Comments\CommentResource;

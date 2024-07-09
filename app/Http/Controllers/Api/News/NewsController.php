@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use App\Helpers\MediaPath;
-use App\Helpers\PaginatedNumber;
+use App\Enums\MediaPath;
+use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\News\NewsRequest;
 use App\Http\Resources\News\NewsCollection;

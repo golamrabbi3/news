@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\Categories;
 
-use App\Helpers\MediaPath;
-use App\Helpers\PaginatedNumber;
+use App\Enums\MediaPath;
+use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Categories\CategoryRequest;
 use App\Http\Resources\Categories\CategoryCollection;
@@ -37,11 +37,11 @@ class CategoriesController extends Controller
             ]);
         } catch (Exception $e) {
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to fetch category list.'),
-            ]);
         }
+
+        return response()->json([
+            'message' => __('Failed to fetch category list.'),
+        ]);
     }
 
     /**

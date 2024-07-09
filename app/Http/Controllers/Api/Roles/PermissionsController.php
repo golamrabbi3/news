@@ -21,10 +21,10 @@ class PermissionsController extends Controller
             ]);
         } catch(Exception $e) {
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to synchronize permissions! Please try again.'),
-            ]);
         }
+
+        return response()->json([
+            'message' => __('Failed to synchronize permissions! Please try again.'),
+        ]);
     }
 }

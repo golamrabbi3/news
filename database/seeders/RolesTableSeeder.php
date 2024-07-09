@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Helpers\Roles;
+use App\Enums\Roles;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;

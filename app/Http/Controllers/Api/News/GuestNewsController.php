@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use App\Helpers\NewsStatus;
-use App\Helpers\PaginatedNumber;
+use App\Enums\NewsStatus;
+use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\News\NewsCollection;
 use App\Http\Resources\News\NewsResource;

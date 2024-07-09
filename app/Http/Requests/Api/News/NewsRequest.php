@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api\News;
 
-use App\Helpers\NewsStatus;
+use App\Enums\NewsStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

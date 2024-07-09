@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Comments;
 
-use App\Helpers\PaginatedNumber;
+use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Comments\CommentResource;
 use App\Models\Comment;
@@ -31,11 +31,11 @@ class CommentsController extends Controller
             ]);
         } catch (Exception $e) {
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to fetch comment list.'),
-            ]);
         }
+
+        return response()->json([
+            'message' => __('Failed to fetch comment list.'),
+        ]);
     }
 
     /**

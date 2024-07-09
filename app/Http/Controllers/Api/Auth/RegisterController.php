@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Helpers\Roles;
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Models\User;
@@ -26,10 +26,10 @@ class RegisterController extends Controller
             ], 201);
         } catch (Exception $e) {
             report($e);
-
-            return response()->json([
-                'message' => __('Failed to register the user! Please try again.'),
-            ], 400);
         }
+
+        return response()->json([
+            'message' => __('Failed to register the user! Please try again.'),
+        ], 400);
     }
 }
