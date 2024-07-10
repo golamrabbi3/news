@@ -42,13 +42,16 @@ Route::prefix('v1')->group(function () {
             ->name('email-verification.verify');
 
         Route::middleware('permission')->group(function () {
-            Route::resource('settings', SettingsController::class)->only('index', 'store');
+            Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+            Route::post('settings/{section}', [SettingsController::class, 'store'])
+                ->name('settings.store')
+                ->whereIn('section', array_keys(config('settings')));
             Route::get('roles/permissions', PermissionsController::class)->name('roles.permissions');
             Route::resource('roles', RolesController::class)->except('create', 'edit');
             Route::resource('categories', CategoriesController::class)->except('create', 'edit');
             Route::resource('tags', TagsController::class)->except('create', 'edit');
             Route::resource('comments', CommentsController::class)->except('create', 'store', 'edit');
-            Route::resource('news/{news}/comments', NewsCommentsController::class)->except('create', 'show', 'edit');
+            Route::resource('news/{news}/comments', NewsCommentsController::class)->except('create', 'show', 'edit')->names('news.comments');
             Route::resource('news', NewsController::class)->except('create', 'edit');
         });
     });

@@ -3,21 +3,24 @@
 namespace App\Http\Controllers\Api\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Settings\SettingRequest;
 use App\Models\Setting;
+use App\Services\AppSettings;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 
 class SettingsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             return response()->json([
                 'message' => __('Fetched settings successfully.'),
-                'data' => Setting::pluck('value', 'key'),
+                'data' => AppSettings::get(),
             ]);
         } catch (Exception $exception) {
             report($exception);
@@ -31,10 +34,21 @@ class SettingsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SettingRequest $request, string $section): JsonResponse
     {
+        // TODO::upload image if there is any image file.
+        $values = Arr::map($request->validated(), function (string $value, string $key) {
+            return ['key' => $key, 'value' => $value];
+        });
+
         try {
-            Setting::updateOrCreate($request->all());
+            Setting::upsert(
+                values: $values,
+                uniqueBy: 'key',
+                update: ['value']
+            );
+
+            AppSettings::set();
 
             return response()->json([
                 'message' => __('Settings are updated successfully.'),
@@ -44,7 +58,7 @@ class SettingsController extends Controller
         }
 
         return response()->json([
-            'message' => __('Settings are updated successfully.'),
+            'message' => __('Failed to update the settings'),
         ]);
     }
 }
