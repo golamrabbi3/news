@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\Settings;
 
+use App\Enums\MediaPath;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Settings\SettingRequest;
 use App\Models\Setting;
 use App\Services\AppSettings;
+use App\Services\FileService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
@@ -20,7 +22,10 @@ class SettingsController extends Controller
         try {
             return response()->json([
                 'message' => __('Fetched settings successfully.'),
-                'data' => AppSettings::get(),
+                'data' => [
+                    'configurations' => config('settings'),
+                    'values' => AppSettings::get()
+                ],
             ]);
         } catch (Exception $exception) {
             report($exception);
@@ -36,12 +41,25 @@ class SettingsController extends Controller
      */
     public function store(SettingRequest $request, string $section): JsonResponse
     {
-        // TODO::upload image if there is any image file.
-        $values = Arr::map($request->validated(), function (string $value, string $key) {
-            return ['key' => $key, 'value' => $value];
-        });
-
         try {
+            $parameters = $request->validated();
+
+            if (!empty($request->allFiles())) {
+                foreach ($request->allFiles() as $attribute => $file) {
+                    $parameters[$attribute] = FileService::upload(
+                        file: $file,
+                        path: MediaPath::Settings,
+                        fileName: $attribute,
+                        suffix: $section,
+                        disk: 'public',
+                    );
+                }
+            }
+
+            $values = Arr::map($parameters, function (string $value, string $key) {
+                return ['key' => $key, 'value' => $value];
+            });
+
             Setting::upsert(
                 values: $values,
                 uniqueBy: 'key',

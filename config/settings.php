@@ -7,6 +7,7 @@ return [
             'input_label' => 'App Name',
             'placeholder' => 'Enter App Name',
             'default' => env('APP_NAME'),
+            'options' => null,
             'validation' => [
                 'rules' => 'required|max:255',
                 'messages' => null,
@@ -18,8 +19,21 @@ return [
             'input_label' => 'Support Email',
             'placeholder' => 'Enter Support Email',
             'default' => null,
+            'options' => null,
             'validation' => [
                 'rules' => 'required|email|max:255',
+                'messages' => null,
+                'attribute' => null,
+            ],
+        ],
+        'app_logo' => [
+            'input_type' => 'file',
+            'input_label' => 'Upload Application Logo',
+            'placeholder' => 'Enter Application logo',
+            'default' => null,
+            'options' => null,
+            'validation' => [
+                'rules' => 'nullable|image:jpg,jpeg,png|max:512',
                 'messages' => null,
                 'attribute' => null,
             ],
@@ -32,6 +46,7 @@ return [
             'input_label' => 'Contact Mobile Number',
             'placeholder' => 'Enter Mobile Number',
             'default' => null,
+            'options' => null,
             'validation' => [
                 'rules' => 'nullable|max:255',
                 'messages' => null,
@@ -43,6 +58,7 @@ return [
             'input_label' => 'Contact Address',
             'placeholder' => 'Enter Contact Address',
             'default' => null,
+            'options' => null,
             'validation' => [
                 'rules' => 'nullable|max:255',
                 'messages' => null,
@@ -54,6 +70,7 @@ return [
             'input_label' => 'Support Email',
             'placeholder' => 'Enter Support Email',
             'default' => null,
+            'options' => null,
             'validation' => [
                 'rules' => 'required|email|max:255',
                 'messages' => null,
@@ -71,7 +88,7 @@ return [
             'options' => [],
             'validation' => [
                 'rules' => 'nullable|max:255',
-                'messages' => [],
+                'messages' => null,
                 'attribute' => 'mobile number',
             ],
         ],
