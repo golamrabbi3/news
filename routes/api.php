@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\Profile\EmailVerificationController;
 use App\Http\Controllers\Api\Profile\LogoutController;
 use App\Http\Controllers\Api\Profile\PasswordController;
 use App\Http\Controllers\Api\Profile\ProfileController;
+use App\Http\Controllers\Api\Queries\GuestQueryController;
+use App\Http\Controllers\Api\Queries\QueriesController;
 use App\Http\Controllers\Api\Roles\PermissionsController;
 use App\Http\Controllers\Api\Roles\RolesController;
 use App\Http\Controllers\Api\Settings\SettingsController;
@@ -28,6 +30,7 @@ Route::prefix('v1')->group(function () {
     Route::post('password-recovery/recover', [PasswordRecoveryController::class, 'recover'])
         ->middleware('throttle:3,1')
         ->name('password.recover');
+    Route::post('query', GuestQueryController::class)->name('query');
 
     Route::prefix('user')->as('user.')->middleware('auth:sanctum')->group(function () {
         Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -48,6 +51,7 @@ Route::prefix('v1')->group(function () {
                 ->whereIn('section', array_keys(config('settings')));
             Route::get('roles/permissions', PermissionsController::class)->name('roles.permissions');
             Route::resource('roles', RolesController::class)->except('create', 'edit');
+            Route::resource('queries', QueriesController::class)->only('index', 'show');
             Route::resource('categories', CategoriesController::class)->except('create', 'edit');
             Route::resource('tags', TagsController::class)->except('create', 'edit');
             Route::resource('comments', CommentsController::class)->except('create', 'store', 'edit');

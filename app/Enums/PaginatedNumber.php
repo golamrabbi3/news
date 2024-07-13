@@ -9,5 +9,6 @@ enum PaginatedNumber: int
     const News = 20;
     const Comments = 20;
     const Categories = 20;
+    const Queries = 20;
     const Tags = 20;
 }

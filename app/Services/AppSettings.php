@@ -21,7 +21,7 @@ class AppSettings
             self::set();
     }
 
-    static public function get(array|string $options = null): array|string|null
+    static public function get(array|string $options = null, mixed $default = null): mixed
     {
         $settings = self::boot();
 
@@ -30,7 +30,7 @@ class AppSettings
         } else if (is_array($options)) {
             return Arr::only($settings, $options);
         } else {
-            return $settings[$options] ?? null;
+            return $settings[$options] ?? $default;
         }
     }
 }

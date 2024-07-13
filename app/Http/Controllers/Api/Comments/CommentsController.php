@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Comments;
 
 use App\Enums\PaginatedNumber;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Comments\CommentCollection;
 use App\Http\Resources\Comments\CommentResource;
 use App\Models\Comment;
 use Exception;
@@ -18,7 +19,7 @@ class CommentsController extends Controller
     public function index()
     {
         try {
-            $data = CommentResource::collection(
+            $data = new CommentCollection(
                 Comment::with('user.avatar')
                     ->withCount('comments')
                     ->latest()
