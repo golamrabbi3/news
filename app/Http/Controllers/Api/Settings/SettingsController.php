@@ -33,7 +33,7 @@ class SettingsController extends Controller
 
         return response()->json([
             'message' => __('Failed to fetch settings! Please try again.'),
-        ]);
+        ], 400);
     }
 
     /**
@@ -77,6 +77,6 @@ class SettingsController extends Controller
 
         return response()->json([
             'message' => __('Failed to update the settings'),
-        ]);
+        ], 400);
     }
 }

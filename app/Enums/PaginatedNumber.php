@@ -11,4 +11,6 @@ enum PaginatedNumber: int
     const Categories = 20;
     const Queries = 20;
     const Tags = 20;
+    const Notifications = 20;
+    const UnreadNotifications = 5;
 }

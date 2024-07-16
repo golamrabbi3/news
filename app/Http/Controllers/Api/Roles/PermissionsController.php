@@ -25,6 +25,6 @@ class PermissionsController extends Controller
 
         return response()->json([
             'message' => __('Failed to synchronize permissions! Please try again.'),
-        ]);
+        ], 400);
     }
 }

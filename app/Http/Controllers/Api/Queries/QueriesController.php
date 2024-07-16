@@ -31,7 +31,7 @@ class QueriesController extends Controller
 
         return response()->json([
             'message' => __('Failed to fetch query list.'),
-        ]);
+        ], 400);
     }
 
     /**

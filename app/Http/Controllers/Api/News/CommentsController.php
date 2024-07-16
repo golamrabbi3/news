@@ -49,7 +49,7 @@ class CommentsController extends Controller
 
         return response()->json([
             'message' => __('Failed to place the comment! Please try again.'),
-        ]);
+        ], 400);
     }
 
     /**
@@ -68,13 +68,13 @@ class CommentsController extends Controller
 
         return response()->json([
             'message' => __('Failed to update the comment! Please try again.')
-        ]);
+        ], 400);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(News $news, int $id)
+    public function destroy(News $news, int $id): JsonResponse
     {
         try {
             $comment = $news->comments()->whereId($id)->whereUserId(request()->user()->id)->first();

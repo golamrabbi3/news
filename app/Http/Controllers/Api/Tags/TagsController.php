@@ -9,13 +9,14 @@ use App\Http\Resources\Tags\TagCollection;
 use App\Http\Resources\Tags\TagResource;
 use App\Models\Tag;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class TagsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $data = new TagCollection(
@@ -34,12 +35,12 @@ class TagsController extends Controller
 
         return response()->json([
             'message' => __('Failed to fetch tag list.'),
-        ]);
+        ], 400);
     }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TagRequest $request)
+    public function store(TagRequest $request): JsonResponse
     {
         try {
             $tag = Tag::create($request->only('name'));
@@ -60,7 +61,7 @@ class TagsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tag $tag)
+    public function show(Tag $tag): JsonResponse
     {
         $tag->loadCount('news');
 
@@ -73,7 +74,7 @@ class TagsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TagRequest $request, Tag $tag)
+    public function update(TagRequest $request, Tag $tag): JsonResponse
     {
         $message = __('Failed to update the tag! Please try again.');
 
@@ -96,7 +97,7 @@ class TagsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag): JsonResponse
     {
         try {
             if ($tag->delete()) {

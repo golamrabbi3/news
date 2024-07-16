@@ -16,7 +16,7 @@ class CommentsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $data = new CommentCollection(
@@ -36,7 +36,7 @@ class CommentsController extends Controller
 
         return response()->json([
             'message' => __('Failed to fetch comment list.'),
-        ]);
+        ], 400);
     }
 
     /**
@@ -72,13 +72,13 @@ class CommentsController extends Controller
 
         return response()->json([
             'message' => __('Failed to approve the comment! Please try again.')
-        ]);
+        ], 400);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Comment $comment): JsonResponse
     {
         try {
             if ($comment->delete()) {

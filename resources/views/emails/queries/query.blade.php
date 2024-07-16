@@ -1,7 +1,7 @@
 @component('mail::message')
 # {{ __('Hello Admin') }}
 
-{{ __("You've just received an query message - ") }}
+{{ __("You got a new query! An user just has sent an query through app query form - ") }}
 
 
 | Client's Inforamtion          |                                   |

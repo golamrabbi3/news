@@ -11,6 +11,7 @@ use App\Http\Resources\Categories\CategoryResource;
 use App\Models\Category;
 use App\Services\FileService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
 
 class CategoriesController extends Controller
@@ -18,7 +19,7 @@ class CategoriesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $data = new CategoryCollection(
@@ -41,13 +42,13 @@ class CategoriesController extends Controller
 
         return response()->json([
             'message' => __('Failed to fetch category list.'),
-        ]);
+        ], 400);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CategoryRequest $request)
+    public function store(CategoryRequest $request): JsonResponse
     {
         try {
             $category = Category::create($request->only('name', 'is_active', 'category_id'));
@@ -72,7 +73,7 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $category): JsonResponse
     {
         $category->load(
             'image',
@@ -89,7 +90,7 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(CategoryRequest $request, Category $category): JsonResponse
     {
         $message = __('Failed to update the category! Please try again.');
         try {
@@ -115,7 +116,7 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category): JsonResponse
     {
         try {
             if ($category->delete()) {
