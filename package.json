@@ -3,9 +3,11 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
+        "build": "run-p type-check \"build-only {@}\" --",
+        "build-only": "vite build",
         "type-check": "vue-tsc --build --force",
-        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+        "format": "prettier --write resources/js/"
     },
     "dependencies": {
         "@vueuse/core": "^10.7.1",
