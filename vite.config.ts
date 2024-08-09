@@ -14,7 +14,7 @@ export default defineConfig({
             refresh: true,
         }),
         vue(),
-        vueJsx(),
+        vueJsx()
     ],
     resolve: {
         alias: {
@@ -22,6 +22,16 @@ export default defineConfig({
         }
     },
     base: '',
+    build: {
+        chunkSizeWarningLimit: 1024,
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    vendor: ['vue', 'vue-router'],
+                },
+            }
+        }
+    },
     server: {
         host: "localhost",
     },
